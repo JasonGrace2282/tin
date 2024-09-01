@@ -7,7 +7,7 @@ from django import forms
 from django.conf import settings
 
 from ..submissions.models import Submission
-from .models import Assignment, Folder, MossResult
+from .models import Assignment, FileAction, Folder, MossResult
 
 logger = getLogger(__name__)
 
@@ -241,3 +241,29 @@ class FolderForm(forms.ModelForm):
             "name",
         ]
         help_texts = {"name": "Note: Folders are ordered alphabetically."}
+
+
+class FileActionForm(forms.ModelForm):
+    class Meta:
+        model = FileAction
+        fields = [
+            "name",
+            "description",
+            "command",
+            "match_type",
+            "match_value",
+            "case_sensitive_match",
+        ]
+        help_texts = {
+            "command": "You can use $FILE to reference the file that matches the below criteria."
+        }
+
+
+class ChooseFileActionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["file_action"] = forms.ModelChoiceField(
+            queryset=FileAction.objects.all(),
+            widget=forms.HiddenInput(),
+        )

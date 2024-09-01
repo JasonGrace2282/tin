@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static "css/choose.css" %}">
+  <script>
+  function addFileAction(actionId) {
+    $.post(
+      "{% url 'assignments:choose_file_action' course.id %}",
+      {
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        file_action: actionId,
+      },
+      function(data) {
+        const url = `{% url 'assignments:create_file_action' course.id %}?action=${actionId}`;
+        const action = $("#id_" + actionId);
+        action.fadeOut(200);
+        action.hide();
+        action.find("button").replaceWith(`<a class="tin-btn card-btn" href="${url}">Edit File Action</a>`);
+        $("#course-actions").append(action);
+        action.fadeIn(200);
+      }
+    );
+  }
+  </script>
+{% endblock %}
+
+{% block main %}
+  {% if course_actions %}
+    <h2>Your File Actions</h2>
+
+    <div class="row" id="course-actions">
+      {% for action in course_actions %}
+        <div class="col">
+          <div class="card">
+            <div class="card-content">
+              <h5 class="card-title">{{ action.name }}</h5>
+              <p class="card-description">{{ action.description }}</p>
+              <a class="tin-btn card-btn" href="{% url 'assignments:create_file_action' course.id %}?action={{ action.id }}">
+                Edit File Action
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
+  <h2>Choose a File Action</h2>
+
+  <div class="row">
+    {% for action in actions %}
+      <div class="col" id="id_{{ action.id }}">
+        <div class="card">
+          <div class="card-content">
+            <h5 class="card-title">{{ action.name }}</h5>
+            <p class="card-description">{{ action.description }}</p>
+            <button id="btn-{{ action.id}}" class="tin-btn card-btn" onclick="addFileAction({{ action.id }})">Add to course</button>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("#id_courses").selectize();
+    });
+  </script>
+
+{% endblock %}
+
+{% block title %}
+  {% if not action %}
+    Create a File Action
+  {% else %}
+    Edit File Action: {{ action.name | title }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+    {% if action %}
+      <h2>Edit File Action {{ action.name | title }}</h2>
+    {% else %}
+      <h2>Create a File Action</h2>
+    {% endif %}
+
+    {% if action and action.courses.count > 1 %}
+      <p>
+        You are modifying a file action that is used in multiple courses.
+        <strong>Any changes you make will affect all courses that use this file action.</strong>
+        <br>
+        Consider <a class="link" href="{% url 'assignments:create_file_action' course.id %}?action={{ action.id }}&copy=1">making a copy</a>.
+      </p>
+    {% endif %}
+
+    <form method="post" action="{% url 'assignments:create_file_action' course.id %}?{{ request.GET.urlencode }}">
+      {% csrf_token %}
+      <div class="tbl">
+        {% for field in form %}
+        <div class="tbl-row" {% if field.name == "permission" %} id="{{ field.name }}" {% endif %}>
+            <span class="tbl-cell bold" style="padding-right:5px;min-width:200px;">{{ field.label_tag }}</span>
+            <span class="tbl-cell form-input">{{ field }}{% if field.help_text %}<br>{{ field.help_text }}{% endif %}</span>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if request.GET.copy %}
+        <input type="hidden" value="1" name="copy">
+      {% endif %}
+
+      <input type="submit" value="{% if action %}Save{% else %}Create{% endif %}" />
+      {% if action %}
+        <div style="padding: 20px 0px;">
+          <a class="errors bold" href="{% url 'assignments:delete_file_action' action.id %}">Delete</a>
+        </div>
+      {% endif %}
+    </form>
+{% endblock main %}

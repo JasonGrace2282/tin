@@ -24,6 +24,8 @@
       </p>
     {% endif %}
 
+    <p>For an explanation of what file actions are, and how to use them, check out <a href="https://tjcsl.github.io/tin">Tin's documentation</a></p>
+
     <form method="post" action="{% url 'assignments:create_file_action' course.id %}?{{ request.GET.urlencode }}">
       {% csrf_token %}
       <div class="tbl">

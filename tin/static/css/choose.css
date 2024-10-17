@@ -2,6 +2,13 @@
   box-sizing: border-box;
 }
 
+.multi-part-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;

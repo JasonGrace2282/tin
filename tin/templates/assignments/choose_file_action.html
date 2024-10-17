@@ -27,7 +27,11 @@
 
 {% block main %}
   {% if course_actions %}
-    <h2>Your File Actions</h2>
+    <div class="multi-part-container">
+      <h2>Your File Actions</h2>
+      <a class="btn tin-btn" href="{% url 'assignments:create_file_action' course.id %}">Create new file action</a>
+    </div>
+
 
     <div class="row" id="course-actions">
       {% for action in course_actions %}

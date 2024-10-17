@@ -25,6 +25,16 @@
   padding-top: 10px;
 }
 
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col {
+    width: 100%;
+  }
+}
+
 .card {
   position: relative;
   display: flex;

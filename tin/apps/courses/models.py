@@ -60,7 +60,7 @@ class Course(models.Model):
     archived = models.BooleanField(default=False)
     permission = models.CharField(max_length=1, choices=PERMISSIONS, default="r")
 
-    objects: CourseQuerySet = CourseQuerySet.as_manager()  # type: ignore[assignment-type]
+    objects = CourseQuerySet.as_manager()
 
     def __str__(self):
         return self.name

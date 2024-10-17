@@ -1,14 +1,5 @@
 {% extends "base.html" %}
 
-{% block head %}
-  <script type="text/javascript">
-    $(document).ready(function () {
-      $("#id_courses").selectize();
-    });
-  </script>
-
-{% endblock %}
-
 {% block title %}
   {% if not action %}
     Create a File Action

@@ -36,6 +36,9 @@
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+  box-shadow:
+    7px 7px 14px #e8e8ea,
+    -7px -7px 14px #fcfcfe;
 }
 
 .card-content {

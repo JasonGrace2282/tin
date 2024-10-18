@@ -48,6 +48,19 @@
       }).on("mouseleave", function() {
         $(this).find(".card-topright").addClass("hidden");
       });
+
+      $("#search").on("keyup", function() {
+        const query = $(this).val();
+        $("#new-actions > .col").each(function() {
+          if($(this).is(`:contains("${query}")`)) {
+            if($(this).is(":hidden")) {
+              $(this).fadeIn(200);
+            }
+          } else {
+            $(this).fadeOut(200);
+          }
+        })
+      })
     })
   </script>
 {% endblock %}
@@ -81,7 +94,10 @@
   </div>
 
 
-  <h2>Choose a File Action</h2>
+  <div class="multi-part-container">
+    <h2>Choose a File Action</h2>
+    <input type="search" id="search" autocomplete="off" placeholder="Search file actions">
+  </div>
 
   <div class="row" id="new-actions">
     {% for action in actions %}

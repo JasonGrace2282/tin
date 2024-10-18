@@ -35,7 +35,7 @@ urlpatterns = [
         name="create_file_action",
     ),
     path(
-        "files/actions/delete/<int:action_id>",
+        "<int:course_id>/files/actions/delete/",
         views.delete_file_action_view,
         name="delete_file_action",
     ),

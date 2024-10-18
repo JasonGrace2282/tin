@@ -67,6 +67,13 @@
   word-wrap: break-word;
 }
 
+.card-topright {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}
+
 .card-title {
   font-size: 1.25rem;
   margin-top: 0;

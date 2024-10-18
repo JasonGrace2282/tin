@@ -244,6 +244,8 @@ class FolderForm(forms.ModelForm):
 
 
 class FileActionForm(forms.ModelForm):
+    """A form to create (or edit) a :class:`.FileAction`."""
+
     class Meta:
         model = FileAction
         fields = [
@@ -254,12 +256,22 @@ class FileActionForm(forms.ModelForm):
             "match_value",
             "case_sensitive_match",
         ]
-        help_texts = {
-            "command": "You can use $FILE to reference the file that matches the below criteria."
-        }
 
 
 class ChooseFileActionForm(forms.Form):
+    """A form to choose a file action.
+
+    .. warning::
+
+        This will allow a user to modify any file action,
+        including file actions that are added to a course the user
+        is not a teacher in.
+
+    This form is primarily intended for use with Javascript,
+    where the file action id cannot be determined at template rendering
+    time.
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

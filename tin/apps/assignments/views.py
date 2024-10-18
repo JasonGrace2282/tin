@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.timezone import now
+from django.views.decorators.http import require_POST
 
 from ... import sandboxing
 from ..auth.decorators import login_required, teacher_or_superuser_required
@@ -552,20 +553,24 @@ def create_file_action(request, course_id: int):
 
 
 @teacher_or_superuser_required
-def delete_file_action_view(request, action_id: int):
-    """Delete a :class:`.FileAction`
+@require_POST
+def delete_file_action_view(request, course_id: int):
+    """Removes a :class:`.FileAction` from a :class:`.Course`.
+
+    This does NOT permanently delete the :class:`.FileAction`.
 
     Args:
         request: The request
+        course_id: The primary key of the :class:`.Course`
         action_id: The primary key of the :class:`.FileAction`
     """
-    if request.user.is_superuser:
-        obj = FileAction
-    else:
-        obj = FileAction.objects.filter(course__teacher=request.user)
-    action = get_object_or_404(obj, id=action_id)
-    action.delete()
-    return redirect("courses:index")
+    course = get_object_or_404(Course.objects.filter_editable(request.user), id=course_id)
+    form = ChooseFileActionForm(request.POST)
+    if form.is_valid():
+        action = form.cleaned_data["file_action"]
+        action.courses.remove(course)
+        return http.JsonResponse({"success": True})
+    return http.JsonResponse({"success": False, "errors": form.errors.as_json()}, status=400)
 
 
 @teacher_or_superuser_required

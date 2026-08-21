@@ -34,14 +34,14 @@ def import_course_data_tasks(self, target_id, source_id, data):
 
     total = len(assignments_to_process)
 
-    for index, (old_assignment, new_folder_id) in enumerate(assignments_to_process):
-        old_grader_fpath = (
-            Path(old_assignment.grader_file.path) if old_assignment.grader_file else None
-        )
-        old_assignment_files = old_assignment.list_files()
-        assignment = old_assignment
+    for index, (assignment, new_folder_id) in enumerate(assignments_to_process):
+        old_grader_fpath = Path(assignment.grader_file.path) if assignment.grader_file else None
+        old_assignment_files = assignment.list_files()
+
+        # on save this will create a new assignment
         assignment.pk = None
         assignment._state.adding = True
+
         assignment.course = target_course
         assignment.folder_id = new_folder_id
         assignment.assigned = timezone.now()
